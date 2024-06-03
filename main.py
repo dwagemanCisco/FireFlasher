@@ -4,6 +4,8 @@ import config.logging_config
 import threading
 import yaml
 
+
+
 # webexToken = os.environ['WEBEX_TOKEN']
 lock = threading.Lock()
 webextoken = ''
@@ -16,10 +18,21 @@ with open("config/sensitive", 'r') as file:
     username = settings['username']
     password = settings['password']
 
+
+# (Optional) Proxy configuration
+# Supports https or wss proxy, wss prioritized.
+proxies = {
+    'https': 'http://proxy.esl.cisco.com:80',
+    'wss': 'socks5://proxy.esl.cisco.com:1080'
+}
+
 # Create a Bot Object
 bot = WebexBot(teams_bot_token=webextoken,
-               bot_name="Calo Booking BOT",
-               approved_domains=["cisco.com"])
+               bot_name="FireFlasher",
+               approved_domains=["cisco.com"],
+               include_demo_commands=False,
+               proxies=proxies
+               )
 
 
 # Add new commands for the bot to listen out for.

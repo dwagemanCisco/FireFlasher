@@ -22,7 +22,8 @@ requests-toolbelt==1.0.0
 setuptools==69.2.0
 urllib3==2.2.1
 uuid==1.30
-webex-bot==0.4.1
+webex-bot[proxy]
 webexteamssdk==1.6.1
 websockets==10.2
 zope.interface==6.2
+websockets_proxy
