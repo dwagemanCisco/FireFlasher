@@ -1,6 +1,5 @@
 from webex_bot.webex_bot import WebexBot
 import botFunction
-# import config.logging_config
 import threading
 import yaml
 from _datetime import datetime
@@ -36,9 +35,6 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
 
-
-
-# webexToken = os.environ['WEBEX_TOKEN']
 lock = threading.Lock()
 webextoken = ''
 username = ''
@@ -70,6 +66,8 @@ bot = WebexBot(teams_bot_token=webextoken,
 # Add new commands for the bot to listen out for.
 bot.add_command(botFunction.listDevices(username,password))
 bot.add_command(botFunction.reimageDevice(bot, lock, username, password))
+
+logger.info("!!!!!Welcome!!!!")
 
 #Run
 bot.run()
