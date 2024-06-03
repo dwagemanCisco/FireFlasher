@@ -1,6 +1,6 @@
 from webex_bot.webex_bot import WebexBot
 import botFunction
-# import config.logging_config
+import config.logging_config
 import threading
 import yaml
 import logging
