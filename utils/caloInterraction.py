@@ -9,6 +9,7 @@ class CaloTool:
     def __init__(self, username, password):
         self.logger = logging.getLogger('MyLogger')
         self.session = requests.Session()
+        self.session.trust_env = False
         self.root_uri = 'https://calo-new.cisco.com'
         self.client_connection_id = ""
         self.username = username
@@ -52,6 +53,7 @@ class CaloTool:
     # wrapper to handle post requests and the calo tool and retrieve the client_connection_id
     def post(self, extra_uri, data):
         uri = f"{self.root_uri}/{extra_uri}"
+        session.trust_env = False
         response = self.session.post(uri, data=data, verify=False)
         if response.status_code >= 200 & response.status_code <= 200:
             response.raise_for_status()
