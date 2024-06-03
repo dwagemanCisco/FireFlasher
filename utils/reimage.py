@@ -65,7 +65,7 @@ class deviceReimage:
 
     # Function to establish serial connection
     def establish_telnet_connection(self):
-        self.telnet = telnetlib.Telnet(self.device.console_access.split(':')[0], int(self.device.console_access.split(':')[1]))
+        self.telnet = telnetlib.Telnet(f"{self.device.console_access.split(':')[0]}.cisco.com", int(self.device.console_access.split(':')[1]))
         self.logger.info(self.uuid + " -- TELNET connection established")
 
     # Function to send commands to the device
