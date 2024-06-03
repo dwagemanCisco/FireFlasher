@@ -140,7 +140,7 @@ class reimageDevice (Command):
                                                     is_one_on_one_space=True, reply=deviceString,
                                                     conv_target_id=activity['id'])
 
-            self.logger.info(calo.uuid + " -- Device booked : " + str(device))
+            self.logger.info(calo.uuid + " -- Device booked : " + str(device) + device.state)
 
 
             #SwitchMatrix

@@ -12,7 +12,7 @@ class deviceReimage:
         self.softwareVersion = softwareVersion #7.2.5 or 9.18
         self.softwareType = softwareType #ASA or FTD
         self.softwareImage = ''
-        self.packageVersion = ''
+        self.packageVersion = None
         self.tftpServer = ''
         self.setImage()
         self.settftpserver()
@@ -37,7 +37,7 @@ class deviceReimage:
     #This function should fill variable softwareImage, first, it should check hardware based on hostname
     #then it should check it a config file and found a mapping for example : FTD - 1010 - 7.2.5  ----> cisco-ftd-fp1k.7.2.5-208.SPA and 7.2.5-208
     def setImage(self):
-        pattern = re.compile(r'\.(\d+\.\d+\.\d+-\d+)\.SPA')
+
 
         with open("config/supported.yaml", 'r') as file:
             supported = yaml.full_load(file)
@@ -59,9 +59,15 @@ class deviceReimage:
                 for v in versions:
                     if self.softwareVersion in v:
                         self.softwareImage = v
+                        pattern = re.compile(r'\.(\d+\.\d+\.\d+-\d+)\.SPA') #cisco-ftd-fp3k.7.2.5-208.SPA -> 7.2.5-208
                         match = pattern.search(v)
                         if match :
                             self.packageVersion = match.group(1)
+                        else:
+                            pattern = re.compile(r'\d+\.\d+\.\d+-\d+\b') #Cisco_FTD_SSP_FP3K_Upgrade-7.4.1-172.sh.REL.tar -> 7.4.1-172
+                            match = pattern.search(v)
+                            if match :
+                                self.packageVersion = match.group(0)
 
     # Function to establish serial connection
     def establish_telnet_connection(self):
@@ -76,8 +82,6 @@ class deviceReimage:
         return output
 
     def rommon_mode(self):
-        self.logger.info(self.uuid + " -- Waiting for rommon state (sending 'esc'))")
-
         output = ''
         self.logger.info(self.uuid + " -- Waiting to read 'Interrupt boot'")
         while "interrupt boot" not in output:
