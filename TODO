@@ -1,0 +1,18 @@
+############P1############
+DONE - When creating Calo testbed, title should be engineer name (retrieved from Webex)
+DONE - Note : This is done automatically : if CSOne case is valid, CSOne case participants are automatically added as interested parties - When creating Calo testbed, add requested as interested parties (retrieved from Webex)
+DONE (but needs to be improved) - ADD LOGGING everywhere for debugging purpose
+- ADD in device.py, linked to config file with 3 octets mapping to subnet and gateway. Example : 67 (third octet in IP addrress) -> vlan 66 gw 10.48.66.1 netmask 255.255.254.0
+
+############P2############
+As part of pre-checks : API call to TFTP server to validate image is there
+DONE - Add config files for supported devices and supported versions (each version should be tested???)
+DONE - Add config files for sftp settings
+DONE - Add config files for mapping full image version based on hardware and software version input, for example (1010 - 7.2.5 - FTD = cisco-ftd-fp1k.7.2.5-208.SPA)
+- Add case number as an argument + verify case is valid
+
+############P3############
+- Add config files for Webex token and generic accoutn credentials
+- Change implementation -> expose services with Rest for re-usability
+- Add queue (Redis) Mecanism for API progress tracking
+DONE - support 1-1

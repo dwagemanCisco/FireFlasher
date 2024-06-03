@@ -1,0 +1,6 @@
+/config/sensitive
+/logs/*
+/env/*
+/env/
+/.idea
+
