@@ -2,6 +2,8 @@ import logging
 from logging.handlers import TimedRotatingFileHandler
 import os
 from datetime import datetime
+import platform
+
 
 # Configure logger
 logger = logging.getLogger('MyLogger')
@@ -10,10 +12,11 @@ logger.setLevel(logging.DEBUG)  # Set to your desired level, such as DEBUG or IN
 # Create formatter
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - [%(filename)s.%(funcName)s] -  %(message)s')
 
-# # Create a stream handler to output to the console
-# console_handler = logging.StreamHandler()
-# console_handler.setFormatter(formatter)
-# logger.addHandler(console_handler)
+if 'Linux' in platform.system():
+    # Create a stream handler to output to the console
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
 
 # Create a TimedRotatingFileHandler for daily rotation
 log_directory = "./logs/"  # Make sure this directory exists
