@@ -61,7 +61,6 @@ class reimageDevice (Command):
         self.lock = lock
         self.username = username
         self.password = password
-
         super().__init__(
             command_keyword='reimage',
             help_message='Book Firepower in Brussels',
@@ -71,7 +70,6 @@ class reimageDevice (Command):
     def execute(self, message, attachment_actions, activity):
         try :
 
-            
             #Object used to interact with Calo
             calo = CaloTool(username=self.username, password=self.password)
             calo.uuid = uuid.uuid4().__str__()

@@ -1,37 +1,39 @@
 from webex_bot.webex_bot import WebexBot
 import botFunction
-import config.logging_config
+# import config.logging_config
 import threading
 import yaml
-import logging
-import datetime
+from _datetime import datetime
 import os
+import logging
 from logging.handlers import TimedRotatingFileHandler
+import platform
 
 
-# # Configure logger
-# logger = logging.getLogger('MyLogger')
-# logger.setLevel(logging.DEBUG)  # Set to your desired level, such as DEBUG or INFO
-#
-# # Create formatter
-# formatter = logging.Formatter('%(asctime)s - %(levelname)s - [%(filename)s.%(funcName)s] -  %(message)s')
-#
-# # # Create a stream handler to output to the console
-# # console_handler = logging.StreamHandler()
-# # console_handler.setFormatter(formatter)
-# # logger.addHandler(console_handler)
-#
-# # Create a TimedRotatingFileHandler for daily rotation
-# log_directory = "./logs/"  # Make sure this directory exists
-# if not os.path.exists(log_directory):
-#     print()
-#     os.makedirs(log_directory)
-#
-# current_date = datetime.now().strftime("%Y-%m-%d")
-# log_filename = os.path.join(log_directory, f"{current_date}.log")
-# file_handler = TimedRotatingFileHandler(log_filename, when='midnight', interval=1, backupCount=7)
-# file_handler.setFormatter(formatter)
-# logger.addHandler(file_handler)
+# Configure logger
+logger = logging.getLogger('MyLogger')
+logger.setLevel(logging.DEBUG)  # Set to your desired level, such as DEBUG or INFO
+
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - [%(filename)s.%(funcName)s] -  %(message)s')
+
+if 'Linux' in platform.system():
+    # Create a stream handler to output to the console
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+# Create a TimedRotatingFileHandler for daily rotation
+log_directory = "./logs/"  # Make sure this directory exists
+if not os.path.exists(log_directory):
+    print()
+    os.makedirs(log_directory)
+
+current_date = datetime.now().strftime("%Y-%m-%d")
+log_filename = os.path.join(log_directory, f"{current_date}.log")
+file_handler = TimedRotatingFileHandler(log_filename, when='midnight', interval=1, backupCount=7)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 
 
@@ -68,8 +70,6 @@ bot = WebexBot(teams_bot_token=webextoken,
 # Add new commands for the bot to listen out for.
 bot.add_command(botFunction.listDevices(username,password))
 bot.add_command(botFunction.reimageDevice(bot, lock, username, password))
-
-
 
 #Run
 bot.run()
