@@ -140,7 +140,7 @@ class reimageDevice (Command):
                                                     is_one_on_one_space=True, reply=deviceString,
                                                     conv_target_id=activity['id'])
 
-            self.logger.info(calo.uuid + " -- Device booked : " + str(device) + device.state)
+            self.logger.info(calo.uuid + " -- Device booked : " + str(device) + "State :" + device.state)
 
 
             #SwitchMatrix
@@ -153,6 +153,8 @@ class reimageDevice (Command):
 
             #reboot / toggle power (intent is to switch to rommon)
             reboot = calo.reboot_device(device)
+            device.state = "Powered On"
+
 
             string = (f"Switchmatrix ports enabled on vlan {device.vlan}. "
                       f"\nConsole cleared and device rebooted/powered on. "
