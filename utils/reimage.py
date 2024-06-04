@@ -83,8 +83,8 @@ class deviceReimage:
 
     def rommon_mode(self):
         output = ''
-        self.logger.info(self.uuid + " -- Waiting to read 'Interrupt boot'")
-        while "interrupt boot" not in output:
+        self.logger.info(self.uuid + " -- Waiting to read 'Cisco System ROMMON'")
+        while "Cisco System ROMMON" not in output:
             time.sleep(1)
             output = self.telnet.read_very_eager().decode('cp437')
             if len(output) > 0:
