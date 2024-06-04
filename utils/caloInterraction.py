@@ -150,7 +150,7 @@ class CaloTool:
                 "client_connection_id":  self.client_connection_id
         }
         try:
-            self.logger.info(self.uuid + " -- Sending book request for device_id : " + device_id)
+            self.logger.info(self.uuid + " -- Sending book request for Device : " + device_id)
             self.logger.info(self.uuid + " -- Booking data : " + str(data))
 
             data = self._send_json_data(f"search_devices/book_device/{device_id}", data)
