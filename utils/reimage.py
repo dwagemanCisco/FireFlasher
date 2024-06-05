@@ -6,7 +6,7 @@ import logging
 
 
 class deviceReimage:
-    def __init__(self, device, softwareVersion, softwareType):
+    def __init__(self, device, softwareVersion, softwareType, uuid):
         self.logger = logging.getLogger('MyLogger')
         self.device = device
         self.softwareVersion = softwareVersion #7.2.5 or 9.18
@@ -16,8 +16,11 @@ class deviceReimage:
         self.tftpServer = ''
         self.setImage()
         self.settftpserver()
-        self.uuid = ''
-        self.logger.info(self.uuid + " -- deviceConsole object : " + str(self))
+        self.uuid = uuid
+        self.logger.info("\n"
+                         "**Full details** -- self.uuid\n" +
+                         str(self.device) +
+                         str(self))
 
     def __str__(self):
         string = f"softwareVersion : {self.softwareVersion}\n"
@@ -45,15 +48,19 @@ class deviceReimage:
                 pass
             else:
                 if any(code in self.device.model_number for code in ('1010', '1120', '1140', '1150')):
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
                     versions = supported['1000']['ftd']
 
                 if any(code in self.device.model_number for code in ('2110', '2120', '2130', '2140')):
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
                     versions = supported['2000']['ftd']
 
                 if '3105' in self.device.model_number:
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
                     versions = supported['3105']['ftd']
 
                 if any(code in self.device.model_number for code in ('3110', '3120', '3130', '3140')):
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
                     versions = supported['3000']['ftd']
 
                 for v in versions:

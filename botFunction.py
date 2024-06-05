@@ -79,6 +79,14 @@ class reimageDevice (Command):
             self.logger.info(f'{calo.uuid} -- MESSAGE RECEIVED : ' + message)
 
 
+            #Validation message
+            startMessage = (f"On it boss ! 👍\n"
+                            f"Task id : {calo.uuid}")
+            resp = self.bot.send_message_to_room_or_person("None", attachment_actions.roomId,
+                                                           reply_one_to_one=False,
+                                                           is_one_on_one_space=True,
+                                                           reply=startMessage,
+                                                           conv_target_id=activity['id'])
 
 
             # need to differentiate 1-1 messages or global
@@ -90,26 +98,20 @@ class reimageDevice (Command):
             message = message.replace("Calo reimage ", '')
 
 
-            #Split and validate arguments
-            self.args = message.split(" ")
-            validation = self.validateArguments()
 
-            if validation is not None :
-                return self.handle_error(validation)
-
-            # Arguments validated
-            startMessage = (f"On it boss ! 👍\n"
-                            f"Task id : {calo.uuid}")
-
-            resp = self.bot.send_message_to_room_or_person("None", attachment_actions.roomId,
-                                                           reply_one_to_one=False,
-                                                           is_one_on_one_space=True,
-                                                           reply=startMessage,
-                                                           conv_target_id=activity['id'])
 
             #need to use lock for concurrent access to device search
             self.logger.info(calo.uuid + " -- Trying to get thread lock")
             with self.lock :
+                # Split and validate arguments
+                self.args = message.split(" ")
+                validation = self.validateArguments(uuid)
+
+                if validation is not None:
+                    return self.handle_error(validation)
+
+
+
                 self.logger.info(calo.uuid + " -- Lock Acquired")
                 #Device search
                 devices = calo.search_for_available_firepower_brussels_by_model(model=self.args[0])
@@ -168,8 +170,7 @@ class reimageDevice (Command):
 
 
             #initiate object to interract with device via Telnet
-            deviceConsole = deviceReimage(device, self.args[2], self.args[1])
-            deviceConsole.uuid = calo.uuid
+            deviceConsole = deviceReimage(device, self.args[2], self.args[1], calo.uuid)
 
             #reimage
             deviceConsole.establish_telnet_connection()
@@ -250,7 +251,7 @@ class reimageDevice (Command):
         except Exception as e :
             self.logger.error(calo.uuid + " -- " + traceback.format_exc())
 
-    def validateArguments(self):
+    def validateArguments(self, uuid):
         #arguments[0] = device model, 1 = ASA or FTD, 2 = version, 3 = (optionnal) case number
         if len(self.args) < 4 :
             return "ARGS_SIZE"
@@ -278,15 +279,19 @@ class reimageDevice (Command):
                 return "ASA_UNSUPPORTED"
             else:
                 if any(code in self.args[0] for code in ('1010', '1120', '1140', '1150')):
+                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 1K')
                     versions = supported['1000']['ftd']
 
                 if any(code in self.args[0] for code in ('2110', '2120', '2130', '2140')):
+                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 2K')
                     versions = supported['2000']['ftd']
 
                 if '3105' in self.args[0]:
+                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 3105')
                     versions = supported['3105']['ftd']
 
                 if any(code in self.args[0] for code in ('3110', '3120', '3130', '3140')):
+                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 3K')
                     versions = supported['3000']['ftd']
 
                 for v in versions:
