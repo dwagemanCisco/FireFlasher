@@ -105,7 +105,7 @@ class reimageDevice (Command):
             with self.lock :
                 # Split and validate arguments
                 self.args = message.split(" ")
-                validation = self.validateArguments(uuid)
+                validation = self.validateArguments(calo.uuid)
 
                 if validation is not None:
                     return self.handle_error(validation)

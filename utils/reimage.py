@@ -8,6 +8,7 @@ import logging
 class deviceReimage:
     def __init__(self, device, softwareVersion, softwareType, uuid):
         self.logger = logging.getLogger('MyLogger')
+        self.uuid = uuid
         self.device = device
         self.softwareVersion = softwareVersion #7.2.5 or 9.18
         self.softwareType = softwareType #ASA or FTD
@@ -16,9 +17,8 @@ class deviceReimage:
         self.tftpServer = ''
         self.setImage()
         self.settftpserver()
-        self.uuid = uuid
         self.logger.info("\n"
-                         "**Full details** -- self.uuid\n" +
+                         f"**Full details** -- {self.uuid}\n" +
                          str(self.device) +
                          str(self))
 
@@ -52,15 +52,15 @@ class deviceReimage:
                     versions = supported['1000']['ftd']
 
                 if any(code in self.device.model_number for code in ('2110', '2120', '2130', '2140')):
-                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 2K')
                     versions = supported['2000']['ftd']
 
                 if '3105' in self.device.model_number:
-                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 3105')
                     versions = supported['3105']['ftd']
 
                 if any(code in self.device.model_number for code in ('3110', '3120', '3130', '3140')):
-                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
+                    self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 3K')
                     versions = supported['3000']['ftd']
 
                 for v in versions:
@@ -223,7 +223,7 @@ class deviceReimage:
 
 
         self.telnet.write(f"scope auto-install\n".encode('cp437'))
-        self.telnet.write(f"install security-pack version {self.packageVersion}\n".encode('cp437'))
+        self.telnet.write(f"install security-pack version {self.packageVersion} force\n".encode('cp437'))
         self.telnet.write("yes\n".encode('cp437'))
         self.telnet.write("yes\n".encode('cp437'))
 
