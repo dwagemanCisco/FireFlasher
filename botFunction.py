@@ -282,17 +282,17 @@ class reimageDevice (Command):
                     self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 1K')
                     versions = supported['1000']['ftd']
 
-                if any(code in self.args[0] for code in ('2110', '2120', '2130', '2140')):
-                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 2K')
-                    versions = supported['2000']['ftd']
-
-                if '3105' in self.args[0]:
-                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 3105')
-                    versions = supported['3105']['ftd']
-
-                if any(code in self.args[0] for code in ('3110', '3120', '3130', '3140')):
-                    self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 3K')
-                    versions = supported['3000']['ftd']
+                # if any(code in self.args[0] for code in ('2110', '2120', '2130', '2140')):
+                #     self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 2K')
+                #     versions = supported['2000']['ftd']
+                #
+                # if '3105' in self.args[0]:
+                #     self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 3105')
+                #     versions = supported['3105']['ftd']
+                #
+                # if any(code in self.args[0] for code in ('3110', '3120', '3130', '3140')):
+                #     self.logger.info(f'{uuid} -- Args[0] : {self.args[0]} -- Matching 3K')
+                #     versions = supported['3000']['ftd']
 
                 for v in versions:
                     if self.args[2] in v:
@@ -318,8 +318,8 @@ class reimageDevice (Command):
             return ("Invalid device model!! \n\n"
                     "**Supported devices**\n"
                     "1010,1120,1140,1150\n"
-                    "2110,2120,2130,2140\n"
-                    "3105,3110,3120,3130,3140\n"
+                    # "2110,2120,2130,2140\n"
+                    # "3105,3110,3120,3130,3140\n"
                     "Reach out to dwageman@cisco.com")
 
         if 'VERSION' in error :

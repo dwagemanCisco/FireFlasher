@@ -15,6 +15,7 @@ class deviceReimage:
         self.softwareImage = ''
         self.packageVersion = None
         self.tftpServer = ''
+        self.modelType = ''
         self.setImage()
         self.settftpserver()
         self.logger.info("\n"
@@ -50,18 +51,22 @@ class deviceReimage:
                 if any(code in self.device.model_number for code in ('1010', '1120', '1140', '1150')):
                     self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 1K')
                     versions = supported['1000']['ftd']
+                    self.modelType = '1k'
 
                 if any(code in self.device.model_number for code in ('2110', '2120', '2130', '2140')):
                     self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 2K')
                     versions = supported['2000']['ftd']
+                    self.modelType = '2k'
 
                 if '3105' in self.device.model_number:
                     self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 3105')
                     versions = supported['3105']['ftd']
+                    self.modelType = '3k'
 
                 if any(code in self.device.model_number for code in ('3110', '3120', '3130', '3140')):
                     self.logger.info(f'{self.uuid} -- Model number : {self.device.model_number} -- Matching 3K')
                     versions = supported['3000']['ftd']
+                    self.modelType = '3k'
 
                 for v in versions:
                     if self.softwareVersion in v:
@@ -113,7 +118,7 @@ class deviceReimage:
     def factory_reset(self):
         self.logger.info(self.uuid + " -- Starting factory-reset from rommon")
 
-        self.telnet.write("confreg0x1\n".encode('cp437'))
+        self.telnet.write("confreg 0x1\n".encode('cp437'))
         self.telnet.write("factory-reset\n".encode('cp437'))
         self.telnet.write("yes\n".encode('cp437'))
         self.telnet.write("ERASE\n".encode('cp437'))
@@ -248,14 +253,28 @@ class deviceReimage:
             time.sleep(5)
             output = self.telnet.read_very_eager().decode('cp437')
             if len(output) > 0 :
-                self.logger.info(self.uuid + " --  " + output)
+                self.logger.info(self.uuid + " --  " + output)\
 
-        self.telnet.write("admin\n".encode('cp437'))
-        self.telnet.write("Admin123\n".encode('cp437'))
-        self.telnet.write("Cxlabs!12\n".encode('cp437'))
-        self.telnet.write("Cxlabs!12\n".encode('cp437'))
+        if self.modelType =='1k':
+            self.logger.info(self.uuid + " --  " + "Model Type : FPR1K")
+            self.telnet.write("admin\n".encode('cp437'))
+            self.telnet.write("Cxlabs!12\n".encode('cp437'))
+
+        if self.modelType =='2k':
+            self.logger.info(self.uuid + " --  " + "Model Type : FPR2K")
+            self.telnet.write("admin\n".encode('cp437'))
+            self.telnet.write("Cxlabs!12\n".encode('cp437'))
+
+        if self.modelType == '3k':
+            self.logger.info(self.uuid + " --  " + "Model Type : FPR3K")
+            self.telnet.write("admin\n".encode('cp437'))
+            self.telnet.write("Admin123\n".encode('cp437'))
+            self.telnet.write("Cxlabs!12\n".encode('cp437'))
+            self.telnet.write("Cxlabs!12\n".encode('cp437'))
+
+
+
         time.sleep(60)
-
         self.telnet.write("connect ftd\n".encode('cp437'))
         self.telnet.write("n\n".encode('cp437')) #display EULA
         self.telnet.write("YES\n".encode('cp437')) #approve EULA
